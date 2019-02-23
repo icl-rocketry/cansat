@@ -4,16 +4,14 @@
 class batt {
 
     // Define private variables, used in the library
-    private {
+    private:
 
       float battPercent;
 
-    }
-
-    public {
+    public:
 
       // Function used to initially set up the battery reading program
-      void setup() {
+      void setup(int battHealthPin) {
         pinMode(battHealthPin, INPUT);
       }
 
@@ -29,5 +27,4 @@ class batt {
         return battPercent;
         
       }
-    }
-};
+    };
