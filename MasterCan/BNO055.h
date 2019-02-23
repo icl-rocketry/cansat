@@ -1,5 +1,5 @@
 /* Interface library for the BNO055 accelerometer
-Simply a conversion of the sensor_api example into a library
+  Simply a conversion of the sensor_api example into a library
 */
 
 // Required libraries
@@ -11,14 +11,19 @@ Simply a conversion of the sensor_api example into a library
 
 class BNO055
 {
+  private:
+
+    // Undocumented, but I think is used to set the i2c address
+    Adafruit_BNO055 bno = Adafruit_BNO055(55);
+
   public:
 
     // Used to initially set up the accelerometer, returns true if succesful and false if not
     bool accelSetup() {
-      
+
       // Undocumented, but I think is used to set the i2c address
       Adafruit_BNO055 bno = Adafruit_BNO055(55);
-      
+
       // Initialise the sensor
       if (bno.begin())
       {
@@ -35,8 +40,8 @@ class BNO055
     }
 
     // Get data from accelerometer, given as array of form {x,y,z}
-    float getData() {
-
+    float* getData() {
+      
       // Get data from the sensor
       sensors_event_t event;
       bno.getEvent(&event);
