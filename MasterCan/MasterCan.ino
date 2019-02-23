@@ -29,6 +29,7 @@ https://github.com/SofaPirate/Chrono
 #include <SD.h>
 #include <SPI.h>
 #include <BNO055.h>
+#include <Batt_health.h>
 
 // Set a variable for the file to write to (required for SD card)
 File myFile;
