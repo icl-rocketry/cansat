@@ -31,6 +31,8 @@ unsigned long prevTime;
 unsigned long nowtime = millis();
 float altitude=0;
 
+float temperature;
+
 // set the pins for the buzzer and LED
 const int buzzerpin=3;
 const int LEDpin=5;
@@ -42,22 +44,28 @@ void setup()
   Wire.begin();
 
   // If the SD card cannot initialise, stop program and beep error
-  if (!SDCard.SDSetup(4)) {
+  if (!SDC.SDSetup(4)) {
     Serial.println("initialization failed!");
     return;
   }
   Serial.println("initialization done.");
 
   // Check if the output file exists on the SD card, and create it if it doesn't
-  SDCard.fileCheck("results.txt");
+  SDC.fileCheck("results.txt");
 
-  if(!BNO055.accelSetup())
+  // Initialise accelerometer
+  if(!accel.accelSetup())
   {
     /* There was a problem detecting the ADXL345 ... check your connections */
     Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
     errorBeep();
   }
 
+  // Initialise BMP388
+  if(!alt.Setup()) {
+    Serial.println("No altimeter detected!");
+  }
+  
   // Turn on work LED
   digitalWrite(LEDpin, HIGH);
   }
@@ -73,20 +81,16 @@ void loop()
   // Set nowTime to the time in ms since the arduino turned on
   nowtime = millis();
 
-  // Set temperature to the measured temperature
-  temperature = bmp085GetTemperature(bmp085ReadUT());
-
-  // Set pressure to the measured pressure
-  pressure = bmp085GetPressure(bmp085ReadUP());
-
-  // Calculate the altitude using the pressure, then set variable altitude to that value
-  altitude = (float)44330 * (1 - pow(((float) pressure/p0), 0.190295));
-
+  // Get the altimeter data
+  static float altitude=alt.Alt();
+  float temperature=alt.Temp();
+  float pressure=alt.Pres();
+  
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
   velocity=(altitude-prevAltitude)/(nowtime/1000-prevTime/1000);
 
   // Get accelerometer data
-  accelData=BNO055.getData();
+  float* accelData=accel.getData();
 
   // Print data to serial for debugging
   Serial.print("Time: ");
@@ -110,11 +114,11 @@ void loop()
   Serial.println();
 
   // Write data to SD Card
-  if ( !SDCard.Write(nowtime,temperature,pressure,altitude,velocity,accelData ) ) {
+  if ( !SDC.Write(nowtime,temperature,pressure,altitude,velocity,accelData) ) {
     Serial.println("Failed to write to SD Card!");
   }
   
-  delay(1000)
+  delay(1000);
 }
 
 //Code to Start buzzer

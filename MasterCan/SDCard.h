@@ -78,3 +78,5 @@ class SDCard
       }
     }
 };
+
+SDCard SDC;

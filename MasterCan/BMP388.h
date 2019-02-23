@@ -7,7 +7,8 @@
 #include "DFRobot_BMP388_I2C.h"
 #include "bmp3_defs.h"
 
-class BMP388 {
+class BMP388 
+{
     private:
         DFRobot_BMP388_I2C bmp3xx;      //Create a bmp388 object to communicate with IIC.
         const float calibAlt = 38.0;        //Accurate altitude (m) to calibrate bmp388 -> NEED TO FILL IN
@@ -40,3 +41,5 @@ class BMP388 {
             return bmp3xx.readTemperature();
         }
 };
+
+BMP388 alt;

@@ -28,3 +28,5 @@ class batt {
         
       }
     };
+
+    batt batt;

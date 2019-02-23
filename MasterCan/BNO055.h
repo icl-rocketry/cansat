@@ -70,3 +70,5 @@ class BNO055
       return calStatus;
     }
 };
+
+BNO055 accel;
