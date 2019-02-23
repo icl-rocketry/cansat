@@ -28,6 +28,7 @@ https://github.com/SofaPirate/Chrono
 #include <Wire.h>
 #include <SD.h>
 #include <SPI.h>
+#include <BNO055.h>
 
 // Set a variable for the file to write to (required for SD card)
 File myFile;
