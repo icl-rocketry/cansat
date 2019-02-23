@@ -64,4 +64,4 @@ class BNO055
       // Return the array
       return calStatus;
     }
-}
+};

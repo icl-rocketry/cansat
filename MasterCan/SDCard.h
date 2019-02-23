@@ -77,3 +77,4 @@ class SDCard
         return false;
       }
     }
+};
