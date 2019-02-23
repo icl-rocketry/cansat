@@ -110,11 +110,11 @@ void loop()
   Serial.println();
 
   // Write data to SD Card
-  if (!SDCard.Write(nowtime,temperature,pressure,altitude,velocity,accelData) {
+  if ( !SDCard.Write(nowtime,temperature,pressure,altitude,velocity,accelData ) ) {
     Serial.println("Failed to write to SD Card!");
   }
   
-  delay(1000);
+  delay(1000)
 }
 
 //Code to Start buzzer

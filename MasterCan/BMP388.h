@@ -1,5 +1,5 @@
 /*Interface for bmp388 altitude, pressure and temperature sensor*/
-#include "arduino.h"
+#include "Arduino.h"
 #include <Wire.h>
 #include <SPI.h>
 #include <math.h>
@@ -15,16 +15,18 @@ class BMP388 {
     public:
         bool Setup() {
             //Initialise sensor
-            if bmp3xx.begin()
+            if (bmp3xx.begin())
+            {
                 return false;       //By default it returns an error
-            else
+            } else {
                 return true;
+            }
         }
         float dispSeaLevel(int mode) {      //Use calibrated altitude to calibrate sea level air pressure, use this as reference to obtain calibrated altitude
             seaLevel = bmp3xx.readSeaLevel(calibAlt);
             if (mode == 0) {                //Mode determines whether to return sealevel air pressure or sea level altitude
                 return seaLevel;            //Read sea level air pressure (Pa)
-            else
+            } else {
                 return bmp3xx.readCalibratedAltitude(seaLevel); //Read sea level altitude (m)
             }
         }
