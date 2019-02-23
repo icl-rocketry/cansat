@@ -20,6 +20,7 @@
 #include "BNO055.h"
 #include "Batt_health.h"
 #include "SDCard.h"
+#include "BMP388.h"
 
 // Initialise variables used to calculate velocity
 float prevAltitude;
