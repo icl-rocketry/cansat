@@ -15,24 +15,11 @@
   bmp085ReadUT functions.
 */
 
-/*
-This project's Website link: https://www.sparkfun.com/tutorials/253
-Print SD timestamp arduino: https://gist.github.com/dhhagan/f1cca00cdb479558b6d1
-https://www.pjrc.com/teensy/td_libs_Time.html
-https://github.com/PaulStoffregen/Time/blob/master/examples/TimeSerial/TimeSerial.ino
-https://github.com/feilipu/Arduino_RTC_Library
-https://github.com/SofaPirate/Chrono 
-*/
-
 // Define Libraries required
 #include <Wire.h>
 #include "BNO055.h"
 #include "Batt_health.h"
 #include "SDCard.h"
-
-// Set a variable for the file to write to (required for SD card)
-File myFile;
-
 
 // Initialise variables used to calculate velocity
 float prevAltitude;
@@ -47,9 +34,6 @@ float altitude=0;
 const int buzzerpin=3;
 const int LEDpin=5;
 
-// Give address to accelerometer
-Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(54321);
-
 void setup()
 {
   // Initialise serial and wire libraries
@@ -57,23 +41,16 @@ void setup()
   Wire.begin();
 
   // If the SD card cannot initialise, stop program and beep error
-  if (!SD.begin(4)) {
+  if (!SDCard.SDSetup(4)) {
     Serial.println("initialization failed!");
-    errorBeep();
     return;
   }
   Serial.println("initialization done.");
 
   // Check if the output file exists on the SD card, and create it if it doesn't
-  if (SD.exists("results.txt")) {
-    Serial.println("results.txt exists.");
-  } else {
-    Serial.println("results.txt doesn't exist,creating...");
-    myFile = SD.open("results.txt", FILE_WRITE);
-    myFile.close();
-  }
+  SDCard.fileCheck("results.txt");
 
-  if(!accel.begin())
+  if(!BNO055.accelSetup())
   {
     /* There was a problem detecting the ADXL345 ... check your connections */
     Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
@@ -107,9 +84,8 @@ void loop()
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
   velocity=(altitude-prevAltitude)/(nowtime/1000-prevTime/1000);
 
-  /* Get a new accelerometer sensor event */
-  sensors_event_t event;
-  accel.getEvent(&event);
+  // Get accelerometer data
+  accelData=BNO055.getData();
 
   // Print data to serial for debugging
   Serial.print("Time: ");
@@ -132,42 +108,9 @@ void loop()
   Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");Serial.println("m/s^2 ");
   Serial.println();
 
-  // Open results.txt so we can start writing to it
-   myFile = SD.open("results.txt", FILE_WRITE);
-
-  if (myFile) { // If the file has been opened succesfully
-
-    // Write data to SD card
-    Serial.print("Writing values to results.txt...");
-    myFile.print("Time: ");
-    myFile.print(nowtime);
-    myFile.println(" ms");
-    myFile.print("Temperature: ");
-    myFile.print(temperature, DEC);
-    myFile.println(" *0.1 deg C");
-    myFile.print("Pressure: ");
-    myFile.print(pressure, DEC);
-    myFile.println(" Pa");
-    myFile.print("Altitude: ");
-    myFile.print(altitude, 2);
-    myFile.println(" m");
-    myFile.print("Velocity: ");
-    myFile.print(velocity);
-    myFile.println(" m/s");
-    myFile.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
-    myFile.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
-    myFile.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");Serial.println("m/s^2 ");
-    myFile.println();
-    
-    // close the file:
-    myFile.close();
-    Serial.println("done.");
-    
-  } else {
-    
-    // if the file didn't open, print an error:
-    Serial.println("error opening results.txt");
-    errorBeep();
+  // Write data to SD Card
+  if (!SDCard.Write(nowtime,temperature,pressure,altitude,velocity,accelData) {
+    Serial.println("Failed to write to SD Card!");
   }
   
   delay(1000);
