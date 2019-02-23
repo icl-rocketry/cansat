@@ -37,7 +37,7 @@ class SDCard
     }
 
     // Function that writes the input data to the SD Card
-    bool Write(int nowTime, float temperature, float pressure, float altitude, float velocity, float accelData) {
+    bool Write(int nowTime, float temperature, float pressure, float altitude, float velocity, float* accelData) {
 
       // Open results.txt so we can start writing to it
       myFile = SD.open("results.txt", FILE_WRITE);
@@ -60,9 +60,9 @@ class SDCard
         myFile.print("Velocity: ");
         myFile.print(velocity);
         myFile.println(" m/s");
-        myFile.print("X: "); myFile.print(event.acceleration.x); myFile.print("  ");
-        myFile.print("Y: "); myFile.print(event.acceleration.y); myFile.print("  ");
-        myFile.print("Z: "); myFile.print(event.acceleration.z); myFile.print("  "); myFile.println("m/s^2 ");
+        myFile.print("X: "); myFile.print(accelData[0]); myFile.print("  ");
+        myFile.print("Y: "); myFile.print(accelData[1]); myFile.print("  ");
+        myFile.print("Z: "); myFile.print(accelData[2]); myFile.print("  "); myFile.println("m/s^2 ");
         myFile.println();
 
         // close the file:

@@ -103,9 +103,9 @@ void loop()
   Serial.print("Velocity: ");
   Serial.print(velocity);
   Serial.println(" m/s");
-  Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");Serial.println("m/s^2 ");
+  Serial.print("X: "); Serial.print(accelData[0]); Serial.print("  ");
+  Serial.print("Y: "); Serial.print(accelData[1]); Serial.print("  ");
+  Serial.print("Z: "); Serial.print(accelData[2]); Serial.print("  ");Serial.println("m/s^2 ");
   Serial.println();
 
   // Write data to SD Card
