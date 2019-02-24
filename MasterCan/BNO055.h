@@ -13,7 +13,7 @@ class BNO055
 {
   private:
 
-    // Undocumented, but I think is used to set the i2c address
+    // Undocumented, but is possibly used to set the i2c address
     Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
   public:
@@ -41,7 +41,7 @@ class BNO055
 
     // Get data from accelerometer, given as array of form {x,y,z}
     float* getData() {
-      
+
       // Get data from the sensor
       sensors_event_t event;
       bno.getEvent(&event);

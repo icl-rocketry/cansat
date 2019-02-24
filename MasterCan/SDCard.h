@@ -1,4 +1,6 @@
 /* Interface library for the SD Card */
+
+// Include neccessary libraries
 #include "Arduino.h"
 #include <SD.h>
 #include <SPI.h>

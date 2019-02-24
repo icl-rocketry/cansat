@@ -1,19 +1,4 @@
-/* BMP085 Extended Example Code
-  by: Jim Lindblom
-  SparkFun Electronics
-  date: 1/18/11
-  updated: 2/26/13
-  license: CC BY-SA v3.0 - http://creativecommons.org/licenses/by-sa/3.0/
-  
-  Get pressure and temperature from the BMP085 and calculate 
-  altitude. Serial.print it out at 9600 baud to serial monitor.
-
-  Update (7/19/11): I've heard folks may be encountering issues
-  with this code, who're running an Arduino at 8MHz. If you're 
-  using an Arduino Pro 3.3V/8MHz, or the like, you may need to 
-  increase some of the delays in the bmp085ReadUP and 
-  bmp085ReadUT functions.
-*/
+/* Main code file for the ICLR CanSat */
 
 // Define Libraries required
 #include <Wire.h>
@@ -27,15 +12,13 @@ float prevAltitude;
 float velocity;
 unsigned long prevTime;
 
-// Initialise altitude and current time, then set a preliminary value 
+// Initialise altitude and current time, then set a preliminary value
 unsigned long nowtime = millis();
-float altitude=0;
-
-float temperature;
+float altitude = 0;
 
 // set the pins for the buzzer and LED
-const int buzzerpin=3;
-const int LEDpin=5;
+const int buzzerpin = 3;
+const int LEDpin = 5;
 
 void setup()
 {
@@ -43,54 +26,54 @@ void setup()
   Serial.begin(9600);
   Wire.begin();
 
-  // If the SD card cannot initialise, stop program and beep error
+  // Initialise SD card
   if (!SDC.SDSetup(4)) {
-    Serial.println("initialization failed!");
+    Serial.println("ERROR: SD initialisation failed");
     return;
   }
-  Serial.println("initialization done.");
 
   // Check if the output file exists on the SD card, and create it if it doesn't
-  SDC.fileCheck("results.txt");
+  if (!SDC.fileCheck("results.txt")) {
+    Serial.println("WARNING: Results file not found, created");
+  }
 
   // Initialise accelerometer
-  if(!accel.accelSetup())
+  if (!accel.accelSetup())
   {
-    /* There was a problem detecting the ADXL345 ... check your connections */
-    Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
+    Serial.println("ERROR: Accelerometer initialisation failed");
     errorBeep();
   }
 
   // Initialise BMP388
-  if(!alt.Setup()) {
-    Serial.println("No altimeter detected!");
+  if (!alt.Setup()) {
+    Serial.println("ERROR: Pressure sensor initialisation failed");
   }
-  
+
   // Turn on work LED
   digitalWrite(LEDpin, HIGH);
-  }
+}
 
 
 void loop()
 {
 
   // Set prevTime and prevAltitude to the current values of time and altitude
-  prevTime=nowtime;
-  prevAltitude=altitude;
+  prevTime = nowtime;
+  prevAltitude = altitude;
 
   // Set nowTime to the time in ms since the arduino turned on
   nowtime = millis();
 
   // Get the altimeter data
-  static float altitude=alt.Alt();
-  float temperature=alt.Temp();
-  float pressure=alt.Pres();
-  
+  static float altitude = alt.Alt();
+  float temperature = alt.Temp();
+  float pressure = alt.Pres();
+
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
-  velocity=(altitude-prevAltitude)/(nowtime/1000-prevTime/1000);
+  velocity = (altitude - prevAltitude) / (nowtime / 1000 - prevTime / 1000);
 
   // Get accelerometer data
-  float* accelData=accel.getData();
+  float* accelData = accel.getData();
 
   // Print data to serial for debugging
   Serial.print("Time: ");
@@ -110,14 +93,15 @@ void loop()
   Serial.println(" m/s");
   Serial.print("X: "); Serial.print(accelData[0]); Serial.print("  ");
   Serial.print("Y: "); Serial.print(accelData[1]); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(accelData[2]); Serial.print("  ");Serial.println("m/s^2 ");
+  Serial.print("Z: "); Serial.print(accelData[2]); Serial.print("  "); Serial.println("m/s^2 ");
   Serial.println();
 
   // Write data to SD Card
-  if ( !SDC.Write(nowtime,temperature,pressure,altitude,velocity,accelData) ) {
-    Serial.println("Failed to write to SD Card!");
+  if ( !SDC.Write(nowtime, temperature, pressure, altitude, velocity, accelData) ) {
+    Serial.println("ERROR: Failed to write to SD Card");
   }
-  
+
+  // Delay (for testing only)
   delay(1000);
 }
 
