@@ -26,12 +26,12 @@ void setup()
     return;
   }
 
-  /* Commented to save space
-     Check if the output file exists on the SD card, and create it if it doesn't
-    if (!SDC.fileCheck("results.txt")) {
-      Serial.println("WARNING: Results file not found, created");
-    }
-  */
+
+  // Check if the output file exists on the SD card, and create it if it doesn't
+  if (!SDC.fileCheck("results.txt")) {
+    Serial.println("WARNING: Results file not found, created");
+  }
+
 
   // Initialise accelerometer
   if (!accel.accelSetup())
