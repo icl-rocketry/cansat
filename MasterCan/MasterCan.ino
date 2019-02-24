@@ -16,9 +16,7 @@ unsigned long prevTime;
 unsigned long nowtime = millis();
 float altitude = 0;
 
-// set the pins for the buzzer and LED
-const int buzzerpin = 3;
-const int LEDpin = 5;
+// set the pins used
 const int battHealthPin = 2;
 
 void setup()
@@ -51,9 +49,7 @@ void setup()
 
   // Initialise battery percentage reader
   batt.Setup(battHealthPin);
-  
-  // Turn on work LED
-  digitalWrite(LEDpin, HIGH);
+
 }
 
 
