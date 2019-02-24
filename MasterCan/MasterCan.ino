@@ -26,12 +26,12 @@ void setup()
     return;
   }
 
-/* Commented to save space
-   Check if the output file exists on the SD card, and create it if it doesn't
-  if (!SDC.fileCheck("results.txt")) {
-    Serial.println("WARNING: Results file not found, created");
-  }
-*/
+  /* Commented to save space
+     Check if the output file exists on the SD card, and create it if it doesn't
+    if (!SDC.fileCheck("results.txt")) {
+      Serial.println("WARNING: Results file not found, created");
+    }
+  */
 
   // Initialise accelerometer
   if (!accel.accelSetup())
@@ -72,30 +72,24 @@ void loop()
   float* accelData = accel.getData();
 
   // Read battery percentage
-  float battPercent=batt.percent(battHealthPin);
-  
+  float battPercent = batt.percent(battHealthPin);
+
   // Print data to serial for debugging
-  Serial.print("Time: ");
-  Serial.print(nowtime);
-  Serial.println(" ms");
-  Serial.print("Temperature: ");
-  Serial.print(temperature, DEC);
-  Serial.println(" *0.1 deg C");
-  Serial.print("Pressure: ");
-  Serial.print(pressure, DEC);
-  Serial.println(" Pa");
-  Serial.print("Altitude: ");
-  Serial.print(altitude, 2);
-  Serial.println(" m");
-  Serial.print("Velocity: ");
-  Serial.print(velocity);
-  Serial.println(" m/s");
-  Serial.print("Battery percentage: ");
+  Serial.print("t: ");// Time
+  Serial.print(nowtime);//ms
+  Serial.print("T: "); // Temperature
+  Serial.print(temperature, DEC);//*0.1 deg C
+  Serial.print("P: ");// Pressure
+  Serial.print(pressure, DEC); //Pa
+  Serial.print("Alt: "); // Altitude
+  Serial.print(altitude, 2); //m
+  Serial.print("V: "); // Velocity
+  Serial.print(velocity); //m/s
+  Serial.print("Batt: "); // Battery percentage
   Serial.print(battPercent);
-  Serial.println("%");
   Serial.print("X: "); Serial.print(accelData[0]); Serial.print("  ");
   Serial.print("Y: "); Serial.print(accelData[1]); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(accelData[2]); Serial.print("  "); Serial.println("m/s^2 ");
+  Serial.print("Z: "); Serial.print(accelData[2]); Serial.print("  ");
   Serial.println();
 
   // Write data to SD Card

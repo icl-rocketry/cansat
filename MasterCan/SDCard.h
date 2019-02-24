@@ -47,27 +47,21 @@ class SDCard
       if (myFile) { // If the file has been opened succesfully
 
         // Write data to SD card
-        myFile.print("Time: ");
-        myFile.print(nowTime);
-        myFile.println(" ms");
-        myFile.print("Temperature: ");
-        myFile.print(temperature, DEC);
-        myFile.println(" *0.1 deg C");
-        myFile.print("Pressure: ");
-        myFile.print(pressure, DEC);
-        myFile.println(" Pa");
-        myFile.print("Altitude: ");
-        myFile.print(altitude, 2);
-        myFile.println(" m");
-        myFile.print("Velocity: ");
-        myFile.print(velocity);
-        myFile.println(" m/s");
-        myFile.print("Battery percentage: ");
+        myFile.print("t: ");// Time 
+        myFile.print(nowTime);//ms
+        myFile.print("T: "); // Temperature
+        myFile.print(temperature, DEC);//*0.1 deg C
+        myFile.print("P: ");// Pressure
+        myFile.print(pressure, DEC); //Pa
+        myFile.print("Alt: "); // Altitude
+        myFile.print(altitude, 2); //m
+        myFile.print("V: "); // Velocity
+        myFile.print(velocity); //m/s
+        myFile.print("Batt: "); // Battery percentage
         myFile.print(battPercent);
-        myFile.println("%");
         myFile.print("X: "); myFile.print(accelData[0]); myFile.print("  ");
         myFile.print("Y: "); myFile.print(accelData[1]); myFile.print("  ");
-        myFile.print("Z: "); myFile.print(accelData[2]); myFile.print("  "); myFile.println("m/s^2 ");
+        myFile.print("Z: "); myFile.print(accelData[2]); myFile.print("  ");
         myFile.println();
 
         // close the file:
