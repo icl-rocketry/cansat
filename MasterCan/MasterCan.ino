@@ -7,11 +7,6 @@
 #include "SDCard.h"
 #include "BMP388.h"
 
-// Initialise variables used to calculate velocity
-float prevAltitude;
-float velocity;
-unsigned long prevTime;
-
 // Initialise altitude and current time, then set a preliminary value
 unsigned long nowtime = millis();
 float altitude = 0;
@@ -59,19 +54,19 @@ void loop()
 {
 
   // Set prevTime and prevAltitude to the current values of time and altitude
-  prevTime = nowtime;
-  prevAltitude = altitude;
+  int prevTime = nowtime;
+  float prevAltitude = altitude;
 
   // Set nowTime to the time in ms since the arduino turned on
   nowtime = millis();
 
   // Get the altimeter data
-  static float altitude = alt.Alt();
+  altitude = alt.Alt();
   float temperature = alt.Temp();
   float pressure = alt.Pres();
 
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
-  velocity = (altitude - prevAltitude) / (nowtime / 1000 - prevTime / 1000);
+  float velocity = (altitude - prevAltitude) / (nowtime / 1000 - prevTime / 1000);
 
   // Get accelerometer data
   float* accelData = accel.getData();
