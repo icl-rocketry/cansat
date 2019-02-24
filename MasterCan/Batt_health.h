@@ -5,11 +5,6 @@
 
 class batt {
 
-    // Define private variables, used in the library
-  private:
-
-    float battPercent;
-
   public:
 
     // Function used to initially set up the battery reading program
