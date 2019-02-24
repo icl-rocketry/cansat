@@ -15,7 +15,6 @@ class BMP388
 
     DFRobot_BMP388_I2C bmp3xx;      //Create a bmp388 object to communicate with IIC.
     const float calibAlt = 38.0;        //Accurate altitude (m) to calibrate bmp388 -> NEED TO FILL IN
-    float seaLevel;                 //Calibrated sea level altitude (m) for bmp388
 
   public:
 
@@ -34,7 +33,7 @@ class BMP388
 
     // Function that returns the sea level air pressure
     float dispSeaLevel(int mode) {      //Use calibrated altitude to calibrate sea level air pressure, use this as reference to obtain calibrated altitude
-      seaLevel = bmp3xx.readSeaLevel(calibAlt);
+      float seaLevel = bmp3xx.readSeaLevel(calibAlt);
       if (mode == 0) {                //Mode determines whether to return sealevel air pressure or sea level altitude
         return seaLevel;            //Read sea level air pressure (Pa)
       } else {
