@@ -21,9 +21,6 @@ class BNO055
     // Used to initially set up the accelerometer, returns true if succesful and false if not
     bool accelSetup() {
 
-      // Undocumented, but I think is used to set the i2c address
-      Adafruit_BNO055 bno = Adafruit_BNO055(55);
-
       // Initialise the sensor
       if (bno.begin())
       {
