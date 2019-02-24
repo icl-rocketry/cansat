@@ -13,7 +13,7 @@ class batt {
   public:
 
     // Function used to initially set up the battery reading program
-    void setup(int battHealthPin) {
+    void Setup(int battHealthPin) {
       pinMode(battHealthPin, INPUT);
     }
 

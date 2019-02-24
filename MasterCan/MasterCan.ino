@@ -19,6 +19,7 @@ float altitude = 0;
 // set the pins for the buzzer and LED
 const int buzzerpin = 3;
 const int LEDpin = 5;
+const int battHealthPin = 2;
 
 void setup()
 {
@@ -49,6 +50,9 @@ void setup()
     Serial.println("ERROR: Pressure sensor initialisation failed");
   }
 
+  // Initialise battery percentage reader
+  batt.Setup(battHealthPin);
+  
   // Turn on work LED
   digitalWrite(LEDpin, HIGH);
 }
@@ -75,6 +79,9 @@ void loop()
   // Get accelerometer data
   float* accelData = accel.getData();
 
+  // Read battery percentage
+  float battPercent=batt.percent(battHealthPin);
+  
   // Print data to serial for debugging
   Serial.print("Time: ");
   Serial.print(nowtime);
@@ -91,13 +98,16 @@ void loop()
   Serial.print("Velocity: ");
   Serial.print(velocity);
   Serial.println(" m/s");
+  Serial.print("Battery percentage: ");
+  Serial.print(battPercent);
+  Serial.println("%");
   Serial.print("X: "); Serial.print(accelData[0]); Serial.print("  ");
   Serial.print("Y: "); Serial.print(accelData[1]); Serial.print("  ");
   Serial.print("Z: "); Serial.print(accelData[2]); Serial.print("  "); Serial.println("m/s^2 ");
   Serial.println();
 
   // Write data to SD Card
-  if ( !SDC.Write(nowtime, temperature, pressure, altitude, velocity, accelData) ) {
+  if ( !SDC.Write(nowtime, temperature, pressure, altitude, velocity, battPercent, accelData) ) {
     Serial.println("ERROR: Failed to write to SD Card");
   }
 
