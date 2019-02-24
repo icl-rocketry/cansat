@@ -42,7 +42,6 @@ void setup()
   if (!accel.accelSetup())
   {
     Serial.println("ERROR: Accelerometer initialisation failed");
-    errorBeep();
   }
 
   // Initialise BMP388
@@ -113,27 +112,4 @@ void loop()
 
   // Delay (for testing only)
   delay(1000);
-}
-
-//Code to Start buzzer
-void buzzerStart()
-{
-  tone(buzzerpin, 10000);
-}
-
-// Code to end buzzer
-void buzzerStop()
-{
-  noTone(buzzerpin);
-}
-
-void errorBeep()
-{
-  while (true)
-  {
-    buzzerStop();
-    delay(500);
-    buzzerStart();
-    delay(500);
-  }
 }
