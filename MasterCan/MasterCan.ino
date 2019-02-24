@@ -23,7 +23,7 @@ void setup()
 {
   // Initialise serial and wire libraries
   Serial.begin(9600);
-  Wire.begin();
+  //Wire.begin();
 
   // Initialise SD card
   if (!SDC.SDSetup(4)) {
