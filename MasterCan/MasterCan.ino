@@ -21,7 +21,7 @@ void setup()
   //Wire.begin();
 
   // Initialise SD card
-  if (!SDC.SDSetup(4)) {
+  if (!SDC.SDSetup(10)) {
     Serial.println("ERROR: SD initialisation failed");
     return;
   }
@@ -76,17 +76,17 @@ void loop()
 
   // Print data to serial for debugging
   Serial.print("t: ");// Time
-  Serial.print(nowtime);//ms
+  Serial.println(nowtime);//ms
   Serial.print("T: "); // Temperature
-  Serial.print(temperature, DEC);//*0.1 deg C
+  Serial.println(temperature, DEC);//*0.1 deg C
   Serial.print("P: ");// Pressure
-  Serial.print(pressure, DEC); //Pa
+  Serial.println(pressure, DEC); //Pa
   Serial.print("Alt: "); // Altitude
-  Serial.print(altitude, 2); //m
+  Serial.println(altitude, 2); //m
   Serial.print("V: "); // Velocity
-  Serial.print(velocity); //m/s
+  Serial.println(velocity); //m/s
   Serial.print("Batt: "); // Battery percentage
-  Serial.print(battPercent);
+  Serial.println(battPercent);
   Serial.print("X: "); Serial.print(accelData[0]); Serial.print("  ");
   Serial.print("Y: "); Serial.print(accelData[1]); Serial.print("  ");
   Serial.print("Z: "); Serial.print(accelData[2]); Serial.print("  ");
