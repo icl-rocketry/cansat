@@ -69,7 +69,7 @@ void loop()
   float velocity = (altitude - prevAltitude) / (nowtime / 1000 - prevTime / 1000);
 
   // Get accelerometer data
-  float* accelData = accel.getData();
+  imu::Vector<3> accelData = accel.getData();
 
   // Read battery percentage
   float battPercent = batt.percent(battHealthPin);
@@ -87,9 +87,9 @@ void loop()
   Serial.println(velocity); //m/s
   Serial.print("Batt: "); // Battery percentage
   Serial.println(battPercent);
-  Serial.print("X: "); Serial.print(accelData[0]); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(accelData[1]); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(accelData[2]); Serial.print("  ");
+  Serial.print("X: "); Serial.print(accelData.x()); Serial.print("  ");
+  Serial.print("Y: "); Serial.print(accelData.y()); Serial.print("  ");
+  Serial.print("Z: "); Serial.print(accelData.z()); Serial.print("  ");
   Serial.println();
 
   // Write data to SD Card

@@ -37,18 +37,15 @@ class BNO055
     }
 
     // Get data from accelerometer, given as array of form {x,y,z}
-    float* getData() {
+    imu::Vector<3> getData() {
 
-      // Get data from the sensor
-      sensors_event_t event;
-      bno.getEvent(&event);
-
+      imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+      
       // Save the new data to an array
-      float accelData[] = {event.orientation.x, event.orientation.y, event.orientation.z};
-
+      //double accelData[] = {euler.x(), euler.y(), euler.z()};
+       
       // Return this new data
-      return accelData;
-
+      return euler;
     }
 
     // Return calibration status of the accelerometer
@@ -61,7 +58,7 @@ class BNO055
       bno.getCalibration(&system, &gyro, &accel, &mag);
 
       // Save those values to an array
-      uint8_t calStatus[] = {system, gyro, accel, mag};
+      uint8_t* calStatus[] = {system, gyro, accel, mag};
 
       // Return the array
       return calStatus;
