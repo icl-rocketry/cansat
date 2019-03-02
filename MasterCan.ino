@@ -31,6 +31,8 @@ https://github.com/SofaPirate/Chrono
 #include <Adafruit_LSM303.h>
 #include <Adafruit_LSM303_U.h>
 
+#include "Buzzer.h"
+
 #define BMP085_ADDRESS 0x77  // I2C address of BMP085
 
 const unsigned char OSS = 0;  // Oversampling Setting (0-4), higher = better resoltion but more power 
@@ -71,6 +73,7 @@ float altitude=0;
 
 // set the pins for the buzzer and LED
 const int buzzerpin=3;
+Buzzer buzzer(buzzerping);
 const int LEDpin=5;
 
 // Give address to accelerometer
@@ -202,28 +205,6 @@ void loop()
   delay(1000);
 }
 
-//Code to Start buzzer
-void buzzerStart()
-{
-  tone(buzzerpin, 10000);
-}
-
-// Code to end buzzer
-void buzzerStop()
-{
-  noTone(buzzerpin);
-}
-
-void errorBeep()
-{
-  while (true)
-  {
-    buzzerStop();
-    delay(500);
-    buzzerStart();
-    delay(500);
-  }
-}
 
 // LOW LEVEL DATA READING AND INTERPRETATION
 //------------------------------------------
