@@ -21,7 +21,7 @@ void setup()
   //Wire.begin();
 
   // Initialise SD card
-  if (!SDC.SDSetup(10)) {
+  if (!SDC.start(10)) {
     Serial.println("ERROR: SD initialisation failed");
     return;
   }
@@ -34,18 +34,18 @@ void setup()
 
 
   // Initialise accelerometer
-  if (!accel.accelSetup())
+  if (!accel.start())
   {
     Serial.println("ERROR: Accelerometer initialisation failed");
   }
 
   // Initialise BMP388
-  if (!alt.Setup()) {
+  if (!alt.start()) {
     Serial.println("ERROR: Pressure sensor initialisation failed");
   }
 
   // Initialise battery percentage reader
-  batt.Setup(battHealthPin);
+  batt.start(battHealthPin);
 
 }
 

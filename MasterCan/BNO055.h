@@ -19,7 +19,7 @@ class BNO055
   public:
 
     // Used to initially set up the accelerometer, returns true if succesful and false if not
-    bool accelSetup() {
+    bool start() {
 
       // Initialise the sensor
       if (bno.begin())

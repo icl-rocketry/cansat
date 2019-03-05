@@ -19,7 +19,7 @@ class BMP388
   public:
 
     // Function used to initialise the sensor, returns true if initialisation was succesful
-    bool Setup() {
+    bool start() {
 
       //Initialise sensor
       if (bmp3xx.begin())

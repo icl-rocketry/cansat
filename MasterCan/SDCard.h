@@ -15,7 +15,7 @@ class SDCard
   public:
 
     // Returns whether the SD card has initialised succesfully
-    bool SDSetup(int SDPin) {
+    bool start(int SDPin) {
       return SD.begin(SDPin);
     }
 
