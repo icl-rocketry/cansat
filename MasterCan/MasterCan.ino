@@ -7,6 +7,8 @@
 #include "SDCard.h"
 #include "BMP388.h"
 
+BNO055 accel;
+
 // Initialise altitude and current time, then set a preliminary value
 unsigned long nowtime = millis();
 float altitude = 0;
