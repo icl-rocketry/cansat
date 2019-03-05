@@ -9,10 +9,12 @@
 
 // set the pins used
 const int battHealthPin = 2;
+const int calibAlt;
 
 BNO055 accel;
 SDCard SDC;
 batt batt(battHealthPin);
+BMP388 alt(calibAlt);
 
 // Initialise altitude and current time, then set a preliminary value
 unsigned long nowtime = millis();
@@ -43,11 +45,6 @@ void setup()
   if (!accel.start())
   {
     Serial.println("ERROR: Accelerometer initialisation failed");
-  }
-
-  // Initialise BMP388
-  if (!alt.start()) {
-    Serial.println("ERROR: Pressure sensor initialisation failed");
   }
 
 }
