@@ -7,15 +7,18 @@
 #include "SDCard.h"
 #include "BMP388.h"
 
+// set the pins used
+const int battHealthPin = 2;
+
 BNO055 accel;
 SDCard SDC;
+batt batt(battHealthPin);
 
 // Initialise altitude and current time, then set a preliminary value
 unsigned long nowtime = millis();
 float altitude = 0;
 
-// set the pins used
-const int battHealthPin = 2;
+
 
 void setup()
 {
@@ -47,9 +50,6 @@ void setup()
     Serial.println("ERROR: Pressure sensor initialisation failed");
   }
 
-  // Initialise battery percentage reader
-  batt.start(battHealthPin);
-
 }
 
 
@@ -75,7 +75,7 @@ void loop()
   imu::Vector<3> accelData = accel.getData();
 
   // Read battery percentage
-  float battPercent = batt.percent(battHealthPin);
+  float battPercent = batt.percent();
 
   // Print data to serial for debugging
   Serial.print("t: ");// Time
