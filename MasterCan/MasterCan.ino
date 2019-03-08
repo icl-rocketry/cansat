@@ -2,6 +2,7 @@
 
 // Define Libraries required
 #include <Wire.h>
+#include "Buzzer.h"
 #include "BNO055.h"
 #include "Batt_health.h"
 #include "SDCard.h"
@@ -10,7 +11,9 @@
 // set the pins used
 const int battHealthPin = 2;
 const int calibAlt;
+const int buzzerpin=3;
 
+Buzzer buzzer(buzzerpin);
 BNO055 accel;
 SDCard SDC;
 batt batt(battHealthPin);
@@ -19,8 +22,6 @@ BMP388 alt(calibAlt);
 // Initialise altitude and current time, then set a preliminary value
 unsigned long nowtime = millis();
 float altitude = 0;
-
-
 
 void setup()
 {
@@ -33,7 +34,6 @@ void setup()
     Serial.println("ERROR: SD initialisation failed");
     return;
   }
-
 
   // Check if the output file exists on the SD card, and create it if it doesn't
   if (!SDC.fileCheck("results.txt")) {
