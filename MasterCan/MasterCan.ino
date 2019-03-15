@@ -21,9 +21,10 @@ batt batt(battHealthPin);
 BMP388 alt(calibAlt);
 transportObject trObj;
 
-// Initialise altitude and current time, then set a preliminary value
-unsigned long nowtime = millis();
+unsigned int nowtime = millis();
+unsigned int packetCount=1;
 float altitude = 0;
+int softState=0;
 
 void setup()
 {
@@ -77,13 +78,15 @@ void loop()
   float battPercent = batt.percent();
 
   // Concatenate the data to a single string
-  String dataString=trObj.create(nowtime, temperature, pressure, altitude, velocity, battPercent, accelData);
+  String dataString=trObj.create(packetCount, nowtime, pressure, temperature,  altitude, velocity, battPercent, softState, accelData);
 
   // Write data to SD Card and Serial
   if ( !SDC.Write(dataString) ) {
     Serial.println("ERROR: Failed to write to SD Card");
   }
   Serial.println(dataString);
+
+  packetCount+=1;
   
   // Delay (for testing only)
   delay(1000);
