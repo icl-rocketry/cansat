@@ -15,7 +15,7 @@ class batt {
   public:
   
     batt(int battHealthPin);
-    float percent();
+    float voltage();
 };
 
 #endif

@@ -75,10 +75,10 @@ void loop()
   imu::Vector<3> accelData = accel.getData();
 
   // Read battery percentage
-  float battPercent = batt.percent();
+  float battVolt = batt.voltage();
 
   // Concatenate the data to a single string
-  String dataString=trObj.create(packetCount, nowtime, pressure, temperature,  altitude, velocity, battPercent, softState, accelData);
+  String dataString=trObj.create(packetCount, nowtime, pressure, temperature,  altitude, velocity, battVolt, softState, accelData);
 
   // Write data to SD Card and Serial
   if ( !SDC.Write(dataString) ) {
