@@ -3,6 +3,7 @@
 // Define Libraries required
 #include <Wire.h>
 #include "Buzzer.h"
+#include "VibMotor.h"
 #include "BNO055.h"
 #include "Batt_health.h"
 #include "SDCard.h"
@@ -13,8 +14,10 @@
 const int battHealthPin = 2;
 const int calibAlt;
 const int buzzerpin=3;
+const int vibpin = 6;
 
 Buzzer buzzer(buzzerpin);
+Vib vib(vibpin);
 BNO055 accel;
 SDCard SDC;
 batt batt(battHealthPin);
@@ -43,13 +46,14 @@ void setup()
     Serial.println("WARNING: Results file not found, created");
   }
 
-
   // Initialise accelerometer
   if (!accel.start())
   {
     Serial.println("ERROR: Accelerometer initialisation failed");
   }
 
+  // Start vibration motor
+  vib.vibstart();
 }
 
 
