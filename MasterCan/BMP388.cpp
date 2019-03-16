@@ -11,15 +11,20 @@
 #include "bmp3_defs.h"
 
 DFRobot_BMP388_I2C bmp3xx;      //Create a bmp388 object to communicate with IIC.
-const float calibAlt = 38.0;        //Accurate altitude (m) to calibrate bmp388 -> NEED TO FILL IN
+// calibAlt=Accurate altitude (m) to calibrate bmp388 -> NEED TO FILL IN
 
-// Function used to initialise the sensor, returns true if initialisation was succesful
+// Create a new instance of the library
 BMP388::BMP388(float calibAlt) {
 
   _calibAlt=calibAlt;
   
-  //Initialise sensor
-  bmp3xx.begin();
+}
+
+
+// Function used to initialise the sensor, returns true if initialisation was succesful
+bool BMP388::start() {
+
+   return bmp3xx.begin();
 
 }
 

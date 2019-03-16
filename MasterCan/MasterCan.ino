@@ -2,7 +2,7 @@
 
 // Define Libraries required
 #include <Wire.h>
-#include "Buzzer.h"
+#include "Bell.h"
 #include "BNO055.h"
 #include "Batt_health.h"
 #include "SDCard.h"
@@ -12,9 +12,12 @@
 // set the pins used
 const int battHealthPin = 2;
 const int calibAlt;
-const int buzzerpin=3;
+const int buzzerpin=8;
+const int minBattVolt=9;
+const int greenLEDPin=5;
+const int redLEDPin=6;
 
-Buzzer buzzer(buzzerpin);
+Bell bell(buzzerpin, greenLEDPin, redLEDPin);
 BNO055 accel;
 SDCard SDC;
 batt batt(battHealthPin);
@@ -24,30 +27,53 @@ transportObject trObj;
 unsigned int nowtime = millis();
 unsigned int packetCount=1;
 float altitude = 0;
-int softState=0;
+byte softState=0;
+
+/* softState variable is a single byte where the error codes are powers of two that are added.
+The individual errors can be found by getting the softState and dividing it into its individual powers of two
+The powers of 2 and their corresponding errors are as follows:
+
+1	-	WARNING: Results file not detected, created
+2	-	ERROR: SD card initialisation failed
+4	-	ERROR: BNO055 initialisation failed
+8	-	ERROR: BMP388 initialisation failed
+16	-	ERROR: Failed to write to SD Card
+32	-	ERROR: Battery voltage low
+*/
 
 void setup()
 {
   // Initialise serial and wire libraries
   Serial.begin(9600);
   //Wire.begin();
+  
+  // Initialise bell library
+  bell.start();
 
   // Initialise SD card
   if (!SDC.start(10)) {
-    Serial.println("ERROR: SD initialisation failed");
-    return;
+        softState=softState=2;
+	bell.fatalError();
   }
 
   // Check if the output file exists on the SD card, and create it if it doesn't
   if (!SDC.fileCheck("results.txt")) {
-    Serial.println("WARNING: Results file not found, created");
+	softState=softState+1;
   }
 
 
   // Initialise accelerometer
   if (!accel.start())
   {
-    Serial.println("ERROR: Accelerometer initialisation failed");
+	softState=softState+4;
+ 	bell.fatalError();
+  }
+
+  // Initialise pressure sensor
+  if (!alt.start())
+  {
+	softState=softState+8;
+	bell.fatalError();
   }
 
 }
@@ -77,12 +103,21 @@ void loop()
   // Read battery percentage
   float battVolt = batt.voltage();
 
+  // Check if the battery voltage is safe
+  if (battVolt < minBattVolt) {
+     softState=softState+32;
+  }
+  
   // Concatenate the data to a single string
   String dataString=trObj.create(packetCount, nowtime, pressure, temperature,  altitude, velocity, battVolt, softState, accelData);
 
+  // Reset softState
+  softState=0;
+
   // Write data to SD Card and Serial
   if ( !SDC.Write(dataString) ) {
-    Serial.println("ERROR: Failed to write to SD Card");
+	softState=softState+16;
+	bell.error();
   }
   Serial.println(dataString);
 
