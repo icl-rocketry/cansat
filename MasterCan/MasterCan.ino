@@ -2,7 +2,7 @@
 
 // Define Libraries required
 #include <Wire.h>
-#include "Buzzer.h"
+#include "Bell.h"
 #include "BNO055.h"
 #include "Batt_health.h"
 #include "SDCard.h"
@@ -12,9 +12,12 @@
 // set the pins used
 const int battHealthPin = 2;
 const int calibAlt;
-const int buzzerpin=3;
+const int buzzerpin=8;
 const int minBattVolt=9;
-Buzzer buzzer(buzzerpin);
+const int greenLEDPin=5;
+const int redLEDPin=6;
+
+Bell bell(buzzerpin, greenLEDPin, redLEDPin);
 BNO055 accel;
 SDCard SDC;
 batt batt(battHealthPin);
@@ -43,11 +46,14 @@ void setup()
   // Initialise serial and wire libraries
   Serial.begin(9600);
   //Wire.begin();
+  
+  // Initialise bell library
+  bell.start();
 
   // Initialise SD card
   if (!SDC.start(10)) {
-    Serial.println("ERROR: SD initialisation failed");
-    return;
+        softState=softState=2;
+	bell.fatalError();
   }
 
   // Check if the output file exists on the SD card, and create it if it doesn't
@@ -60,12 +66,14 @@ void setup()
   if (!accel.start())
   {
 	softState=softState+4;
+ 	bell.fatalError();
   }
 
   // Initialise pressure sensor
   if (!alt.start())
   {
 	softState=softState+8;
+	bell.fatalError();
   }
 
 }
@@ -109,6 +117,7 @@ void loop()
   // Write data to SD Card and Serial
   if ( !SDC.Write(dataString) ) {
 	softState=softState+16;
+	bell.error();
   }
   Serial.println(dataString);
 
