@@ -50,6 +50,12 @@ void setup()
     Serial.println("ERROR: Accelerometer initialisation failed");
   }
 
+  // Initialise pressure sensor
+  if (!alt.start())
+  {
+    Serial.println("ERROR: Altimeter initialisation failed");
+  }
+
 }
 
 

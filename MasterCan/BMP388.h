@@ -23,6 +23,7 @@ class BMP388
 
     // Function used to initialise the sensor, returns true if initialisation was succesful
     BMP388(float calibAlt);
+    bool start();
     float dispSeaLevel(int mode);
     float Alt();
     float Pres();
