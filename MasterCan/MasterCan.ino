@@ -7,6 +7,7 @@
 #include "Batt_health.h"
 #include "SDCard.h"
 #include "BMP388.h"
+#include "WordCreator.h"
 
 // set the pins used
 const int battHealthPin = 2;
@@ -18,10 +19,12 @@ BNO055 accel;
 SDCard SDC;
 batt batt(battHealthPin);
 BMP388 alt(calibAlt);
+transportObject trObj;
 
-// Initialise altitude and current time, then set a preliminary value
-unsigned long nowtime = millis();
+unsigned int nowtime = millis();
+unsigned int packetCount=1;
 float altitude = 0;
+int softState=0;
 
 void setup()
 {
@@ -72,31 +75,19 @@ void loop()
   imu::Vector<3> accelData = accel.getData();
 
   // Read battery percentage
-  float battPercent = batt.percent();
+  float battVolt = batt.voltage();
 
-  // Print data to serial for debugging
-  Serial.print("t: ");// Time
-  Serial.println(nowtime);//ms
-  Serial.print("T: "); // Temperature
-  Serial.println(temperature, DEC);//*0.1 deg C
-  Serial.print("P: ");// Pressure
-  Serial.println(pressure, DEC); //Pa
-  Serial.print("Alt: "); // Altitude
-  Serial.println(altitude, 2); //m
-  Serial.print("V: "); // Velocity
-  Serial.println(velocity); //m/s
-  Serial.print("Batt: "); // Battery percentage
-  Serial.println(battPercent);
-  Serial.print("X: "); Serial.print(accelData.x()); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(accelData.y()); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(accelData.z()); Serial.print("  ");
-  Serial.println();
+  // Concatenate the data to a single string
+  String dataString=trObj.create(packetCount, nowtime, pressure, temperature,  altitude, velocity, battVolt, softState, accelData);
 
-  // Write data to SD Card
-  if ( !SDC.Write(nowtime, temperature, pressure, altitude, velocity, battPercent, accelData) ) {
+  // Write data to SD Card and Serial
+  if ( !SDC.Write(dataString) ) {
     Serial.println("ERROR: Failed to write to SD Card");
   }
+  Serial.println(dataString);
 
+  packetCount+=1;
+  
   // Delay (for testing only)
   delay(1000);
 }

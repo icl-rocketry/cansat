@@ -20,7 +20,7 @@ class SDCard
     SDCard();
     bool start(int SDPin);
     bool fileCheck(char fileName);
-    bool Write(int nowTime, float temperature, float pressure, float altitude, float velocity, float battPercent, imu::Vector<3> accelData);
+    bool Write(String data);
 };
 
 #endif

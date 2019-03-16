@@ -38,7 +38,7 @@ bool SDCard::fileCheck(char fileName) {
 }
 
 // Function that writes the input data to the SD Card
-bool SDCard::Write(int nowTime, float temperature, float pressure, float altitude, float velocity, float battPercent, imu::Vector<3> accelData) {
+bool SDCard::Write(String data) {
 
   // Open results.txt so we can start writing to it
   myFile = SD.open("results.txt", FILE_WRITE);
@@ -46,22 +46,7 @@ bool SDCard::Write(int nowTime, float temperature, float pressure, float altitud
   if (myFile) { // If the file has been opened succesfully
 
     // Write data to SD card
-    myFile.print("t: ");// Time
-    myFile.print(nowTime);//ms
-    myFile.print("T: "); // Temperature
-    myFile.print(temperature, DEC);//*0.1 deg C
-    myFile.print("P: ");// Pressure
-    myFile.print(pressure, DEC); //Pa
-    myFile.print("Alt: "); // Altitude
-    myFile.print(altitude, 2); //m
-    myFile.print("V: "); // Velocity
-    myFile.print(velocity); //m/s
-    myFile.print("Batt: "); // Battery percentage
-    myFile.print(battPercent);
-    myFile.print("X: "); myFile.print(accelData.x()); myFile.print("  ");
-    myFile.print("Y: "); myFile.print(accelData.y()); myFile.print("  ");
-    myFile.print("Z: "); myFile.print(accelData.z()); myFile.print("  ");
-    myFile.println();
+    myFile.println(data);
 
     // close the file:
     myFile.close();

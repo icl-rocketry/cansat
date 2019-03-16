@@ -13,13 +13,12 @@ batt::batt(int battHealthPin)
   
 }
 
-// Function that outputs the battery health as a percent
-float batt::percent() {
+// Function that outputs the battery health in volts
+float batt::voltage() {
 
   // Return the analog voltage and convert to percent
-  return analogRead(_battHealthPin) * (100. / 9.) * (5. / 1023.) * (11);
+  return analogRead(_battHealthPin) * (5. / 1023.) * (11);
   // 5/1023 due to arduino analog scaling
   //11 due to reciprocal of 1/11 from Vout = R2/(R1+R2)*Vin
-  //100%9 to calculate percentage based on 9V initial health
 
 }
