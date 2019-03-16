@@ -2,6 +2,7 @@
 
 // Define Libraries required
 #include <Wire.h>
+#include "VibMotor.h"
 #include "Bell.h"
 #include "BNO055.h"
 #include "Batt_health.h"
@@ -12,11 +13,13 @@
 // set the pins used
 const int battHealthPin = 2;
 const int calibAlt;
+const int vibpin = 6;
 const int buzzerpin=8;
 const int minBattVolt=9;
 const int greenLEDPin=5;
 const int redLEDPin=6;
 
+Vib vib(vibpin);
 Bell bell(buzzerpin, greenLEDPin, redLEDPin);
 BNO055 accel;
 SDCard SDC;
@@ -61,7 +64,6 @@ void setup()
 	softState=softState+1;
   }
 
-
   // Initialise accelerometer
   if (!accel.start())
   {
@@ -76,6 +78,8 @@ void setup()
 	bell.fatalError();
   }
 
+  // Start vibration motor
+  vib.vibstart();
 }
 
 
