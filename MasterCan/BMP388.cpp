@@ -20,7 +20,6 @@ BMP388::BMP388(float calibAlt) {
   
 }
 
-
 // Function used to initialise the sensor, returns true if initialisation was succesful
 bool BMP388::start() {
 
