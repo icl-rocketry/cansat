@@ -27,6 +27,14 @@ batt batt(battHealthPin);
 BMP388 alt(calibAlt);
 transportObject trObj;
 
+// Vertical speed below which CanSat will assume it is stationary, and descending.
+const float velStopThresh=2;
+const float velDropThresh=3;
+
+// Respective times that CanSat has to stay in its state for to count as stationary and descending
+const float velStopTimeThresh=3;
+const float velDropTimeThresh=3;
+
 unsigned int nowtime = millis();
 unsigned int packetCount=1;
 float altitude = 0;
@@ -49,7 +57,7 @@ void setup()
   // Initialise serial and wire libraries
   Serial.begin(9600);
   //Wire.begin();
-  
+
   // Initialise bell library
   bell.start();
 
@@ -90,7 +98,7 @@ void loop()
   int prevTime = nowtime;
   float prevAltitude = altitude;
 
-  // Set nowTime to the time in ms since the arduino turned on
+  // Set nowtime to the time in ms since the arduino turned on
   nowtime = millis();
 
   // Get the altimeter data
@@ -100,6 +108,48 @@ void loop()
 
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
   float velocity = (altitude - prevAltitude) / (nowtime / 1000 - prevTime / 1000);
+
+
+  static bool fell=false;
+  static int prevDropTime=nowtime;
+
+  // If the velocity is decreasing past a certain rate
+  if (velocity<velDropThresh) {
+    
+    // If this descent has continued for a while, set the flag fell to true
+    if (prevDropTime+velDropTimeThresh<nowtime) {
+      
+      fell=true;
+
+    }
+
+  // Otherwise reset the previous drop time
+  } 
+  else {
+
+    prevDropTime=nowtime;
+
+  }
+
+  static int prevStopTime=nowtime;
+
+  // If the velocity is small and the CanSat has fallen
+  if ((abs(velocity)<velStopThresh) && fell) {
+
+    // If the CanSat hasn't been moving for a while, start the buzzer
+    if (nowtime>prevStopTime+velStopTimeThresh) {
+
+      bell.buzzerStart();
+
+    }
+
+  // Otherwise reset the previous stop time 
+  } 
+  else {
+
+    prevStopTime=nowtime;
+
+  }
 
   // Get accelerometer data
   imu::Vector<3> accelData = accel.getData();
@@ -115,7 +165,7 @@ void loop()
   // Concatenate the data to a single string
   String dataString=trObj.create(packetCount, nowtime, pressure, temperature,  altitude, velocity, battVolt, softState, accelData);
 
-  // Reset softState
+  // Reset softState 
   softState=0;
 
   // Write data to SD Card and Serial

@@ -22,3 +22,5 @@ void Vib::vibstart() {
 void Vib::vibstop() {
   digitalWrite(vibpin,LOW);
 }*/
+
+#endif
