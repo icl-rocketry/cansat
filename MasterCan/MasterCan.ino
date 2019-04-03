@@ -64,6 +64,7 @@ void setup()
   // Initialise SD card
   if (!SDC.start(10)) {
         softState=softState=2;
+        Serial.println(softState);
 	bell.fatalError();
   }
 
@@ -76,6 +77,7 @@ void setup()
   if (!accel.start())
   {
 	softState=softState+4;
+	Serial.println(softState);
  	bell.fatalError();
   }
 
@@ -83,6 +85,7 @@ void setup()
   if (!alt.start())
   {
 	softState=softState+8;
+	Serial.println(softState);
 	bell.fatalError();
   }
 

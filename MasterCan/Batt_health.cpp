@@ -17,7 +17,7 @@ batt::batt(int battHealthPin)
 float batt::voltage() {
 
   // Return the analog voltage and convert to percent
-  return analogRead(_battHealthPin) * (5. / 1023.) * (11);
+  return analogRead(_battHealthPin) * (5. / 1023.) * (147/47);
   // 5/1023 due to arduino analog scaling
   //11 due to reciprocal of 1/11 from Vout = R2/(R1+R2)*Vin
 
