@@ -17,7 +17,7 @@ class BNO055
 {
   private:
 
-    // Undocumented, but variable is possibly used to set the i2c address
+    // Create a BNO055 object
     Adafruit_BNO055 bno;
 
   public:

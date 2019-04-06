@@ -10,7 +10,7 @@
 #include "BMP388.h"
 #include "WordCreator.h"
 
-// set the pins used
+// Set the pins used
 const int battHealthPin = 2;
 const int calibAlt;
 const int vibpin = 6;
@@ -56,7 +56,6 @@ void setup()
 {
   // Initialise serial and wire libraries
   Serial.begin(9600);
-  //Wire.begin();
 
   // Initialise bell library
   bell.start();
@@ -111,7 +110,6 @@ void loop()
 
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
   float velocity = (altitude - prevAltitude) / (nowtime / 1000 - prevTime / 1000);
-
 
   static bool fell=false;
   static int prevDropTime=nowtime;
