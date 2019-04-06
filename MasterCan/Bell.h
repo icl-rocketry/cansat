@@ -18,6 +18,7 @@ public:
 
 };
 
+// Set variables
 Bell::Bell(int buzzerpin, int greenLEDPin, int redLEDPin) {
   Bell::buzzerpin = buzzerpin;
   Bell::greenLEDPin = greenLEDPin;

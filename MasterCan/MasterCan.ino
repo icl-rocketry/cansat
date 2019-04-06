@@ -10,9 +10,9 @@
 #include "BMP388.h"
 #include "WordCreator.h"
 
-// set the pins used
+// Set the pins used
 const int battHealthPin = 2;
-const int calibAlt;
+const int calibAlt=39;
 const int vibpin = 6;
 const int buzzerpin=8;
 const int minBattVolt=9;
@@ -35,9 +35,8 @@ const float velDropThresh=3;
 const float velStopTimeThresh=3;
 const float velDropTimeThresh=3;
 
-unsigned int nowtime = millis();
-unsigned int packetCount=1;
-float altitude = 0;
+unsigned long nowtime = millis();
+unsigned long packetCount=1;
 byte softState=0;
 
 /* softState variable is a single byte where the error codes are powers of two that are added.
@@ -47,23 +46,22 @@ The powers of 2 and their corresponding errors are as follows:
 1	-	WARNING: Results file not detected, created
 2	-	ERROR: SD card initialisation failed
 4	-	ERROR: BNO055 initialisation failed
-8	-	ERROR: BMP388 initialisation failed
-16	-	ERROR: Failed to write to SD Card
-32	-	ERROR: Battery voltage low
+8	-	ERROR: Failed to write to SD Card
+16	-	ERROR: Battery voltage low
 */
 
 void setup()
 {
   // Initialise serial and wire libraries
   Serial.begin(9600);
-  //Wire.begin();
 
   // Initialise bell library
   bell.start();
 
   // Initialise SD card
   if (!SDC.start(10)) {
-        softState=softState=2;
+        softState=2;
+        Serial.println(softState);
 	bell.fatalError();
   }
 
@@ -76,16 +74,13 @@ void setup()
   if (!accel.start())
   {
 	softState=softState+4;
+	Serial.println(softState);
  	bell.fatalError();
   }
 
   // Initialise pressure sensor
-  if (!alt.start())
-  {
-	softState=softState+8;
-	bell.fatalError();
-  }
-
+  alt.start();
+  
   // Start vibration motor
   vib.vibstart();
 }
@@ -95,7 +90,8 @@ void loop()
 {
 
   // Set prevTime and prevAltitude to the current values of time and altitude
-  int prevTime = nowtime;
+  unsigned long prevTime = nowtime;
+  static float altitude = 0;
   float prevAltitude = altitude;
 
   // Set nowtime to the time in ms since the arduino turned on
@@ -107,11 +103,10 @@ void loop()
   float pressure = alt.Pres();
 
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
-  float velocity = (altitude - prevAltitude) / (nowtime / 1000 - prevTime / 1000);
-
+  float velocity = (altitude - prevAltitude) / ((nowtime - prevTime )/1000);
 
   static bool fell=false;
-  static int prevDropTime=nowtime;
+  static unsigned long prevDropTime=nowtime;
 
   // If the velocity is decreasing past a certain rate
   if (velocity<velDropThresh) {
@@ -131,7 +126,7 @@ void loop()
 
   }
 
-  static int prevStopTime=nowtime;
+  static unsigned long prevStopTime=nowtime;
 
   // If the velocity is small and the CanSat has fallen
   if ((abs(velocity)<velStopThresh) && fell) {
@@ -159,7 +154,7 @@ void loop()
 
   // Check if the battery voltage is safe
   if (battVolt < minBattVolt) {
-     softState=softState+32;
+     softState=softState+16;
   }
   
   // Concatenate the data to a single string
@@ -170,7 +165,7 @@ void loop()
 
   // Write data to SD Card and Serial
   if ( !SDC.Write(dataString) ) {
-	softState=softState+16;
+	softState=softState+8;
 	bell.error();
   }
   Serial.println(dataString);
