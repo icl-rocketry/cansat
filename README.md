@@ -30,9 +30,8 @@ It is a single byte where the error codes are each single bits. The individual e
 1	-	WARNING: Results file not detected, created
 2	-	ERROR: SD card initialisation failed
 4	-	ERROR: BNO055 initialisation failed
-8	-	ERROR: BMP388 initialisation failed
-16	-	ERROR: Failed to write to SD Card
-32	-	ERROR: Battery voltage low
+8	-	ERROR: Failed to write to SD Card
+16	-	ERROR: Battery voltage low
 ```
 
 For example, a softState of 49 would mean:

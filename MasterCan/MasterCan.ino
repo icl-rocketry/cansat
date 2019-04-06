@@ -46,9 +46,8 @@ The powers of 2 and their corresponding errors are as follows:
 1	-	WARNING: Results file not detected, created
 2	-	ERROR: SD card initialisation failed
 4	-	ERROR: BNO055 initialisation failed
-8	-	ERROR: BMP388 initialisation failed
-16	-	ERROR: Failed to write to SD Card
-32	-	ERROR: Battery voltage low
+8	-	ERROR: Failed to write to SD Card
+16	-	ERROR: Battery voltage low
 */
 
 void setup()
@@ -80,13 +79,8 @@ void setup()
   }
 
   // Initialise pressure sensor
-  if (!alt.start())
-  {
-	softState=softState+8;
-	Serial.println(softState);
-	bell.fatalError();
-  }
-
+  alt.start();
+  
   // Start vibration motor
   vib.vibstart();
 }
@@ -160,7 +154,7 @@ void loop()
 
   // Check if the battery voltage is safe
   if (battVolt < minBattVolt) {
-     softState=softState+32;
+     softState=softState+16;
   }
   
   // Concatenate the data to a single string
@@ -171,7 +165,7 @@ void loop()
 
   // Write data to SD Card and Serial
   if ( !SDC.Write(dataString) ) {
-	softState=softState+16;
+	softState=softState+8;
 	bell.error();
   }
   Serial.println(dataString);
