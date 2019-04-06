@@ -80,13 +80,8 @@ void setup()
   }
 
   // Initialise pressure sensor
-  if (!alt.start())
-  {
-	softState=softState+8;
-	Serial.println(softState);
-	bell.fatalError();
-  }
-
+  alt.start();
+  
   // Start vibration motor
   vib.vibstart();
 }
