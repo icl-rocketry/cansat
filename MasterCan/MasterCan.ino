@@ -12,7 +12,7 @@
 
 // Set the pins used
 const int battHealthPin = 2;
-const int calibAlt;
+const int calibAlt=39;
 const int vibpin = 6;
 const int buzzerpin=8;
 const int minBattVolt=9;
@@ -35,9 +35,8 @@ const float velDropThresh=3;
 const float velStopTimeThresh=3;
 const float velDropTimeThresh=3;
 
-unsigned int nowtime = millis();
-unsigned int packetCount=1;
-float altitude = 0;
+unsigned long nowtime = millis();
+unsigned long packetCount=1;
 byte softState=0;
 
 /* softState variable is a single byte where the error codes are powers of two that are added.
@@ -97,7 +96,8 @@ void loop()
 {
 
   // Set prevTime and prevAltitude to the current values of time and altitude
-  int prevTime = nowtime;
+  unsigned long prevTime = nowtime;
+  static float altitude = 0;
   float prevAltitude = altitude;
 
   // Set nowtime to the time in ms since the arduino turned on
@@ -109,10 +109,10 @@ void loop()
   float pressure = alt.Pres();
 
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
-  float velocity = (altitude - prevAltitude) / (nowtime / 1000 - prevTime / 1000);
+  float velocity = (altitude - prevAltitude) / ((nowtime - prevTime )/1000);
 
   static bool fell=false;
-  static int prevDropTime=nowtime;
+  static unsigned long prevDropTime=nowtime;
 
   // If the velocity is decreasing past a certain rate
   if (velocity<velDropThresh) {
@@ -132,7 +132,7 @@ void loop()
 
   }
 
-  static int prevStopTime=nowtime;
+  static unsigned long prevStopTime=nowtime;
 
   // If the velocity is small and the CanSat has fallen
   if ((abs(velocity)<velStopThresh) && fell) {

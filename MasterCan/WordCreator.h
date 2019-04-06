@@ -12,7 +12,7 @@ class transportObject
   public:
 
   transportObject();
-  String create(int packetCount, int nowTime, float pressure, float temperature,  float altitude, float velocity, float battVolt, byte softState, imu::Vector<3> accelData);
+  String create(unsigned long packetCount, unsigned long nowTime, float pressure, float temperature,  float altitude, float velocity, float battVolt, byte softState, imu::Vector<3> accelData);
 
 };
 
