@@ -57,6 +57,6 @@ When the CanSat detects that it has landed, the buzzer will turn on and emit a c
 
 To save storage space and make the CanSat more reliable, the data packet is as minimalistic as possible. It has the following structure:
 
-`packetCount:flightTime:pressure:temperature:altitude:velocity:batteryVoltage:softState:Xacceleration:Yacceleration:Zacceleration`
+`packetCount:flightTime:pressure:temperature:altitude:velocity:batteryVoltage:softState:Xacceleration:Yacceleration:Zacceleration:`
 
 All units are in SI.
