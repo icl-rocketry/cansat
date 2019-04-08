@@ -8,7 +8,7 @@
 #include "Batt_health.h"
 #include "SDCard.h"
 #include "BMP388.h"
-#include "WordCreator.h"
+#include "dataSend.h"
 
 // Set the pins used
 const int battHealthPin = 2;
@@ -25,7 +25,7 @@ BNO055 accel;
 SDCard SDC;
 batt batt(battHealthPin);
 BMP388 alt(calibAlt);
-transportObject trObj;
+logger logger("results.txt",':');
 
 // Vertical speed below which CanSat will assume it is stationary, and descending.
 const float velStopThresh=2;
@@ -146,9 +146,6 @@ void loop()
 
   }
 
-  // Get accelerometer data
-  imu::Vector<3> accelData = accel.getData();
-
   // Read battery percentage
   float battVolt = batt.voltage();
 
@@ -156,20 +153,33 @@ void loop()
   if (battVolt < minBattVolt) {
      softState=softState+16;
   }
-  
-  // Concatenate the data to a single string
-  String dataString=trObj.create(packetCount, nowtime, pressure, temperature,  altitude, velocity, battVolt, softState, accelData);
+
+  // Get accelerometer data
+  imu::Vector<3> accelData = accel.getData();
+
+  // Send data
+  int writeError=  logger.send(packetCount);
+  writeError += logger.send(nowtime);
+  writeError += logger.send(pressure);
+  writeError += logger.send(temperature);
+  writeError += logger.send(altitude);
+  writeError += logger.send(velocity);
+  writeError += logger.send(battVolt);
+  writeError += logger.send(softState);
+  writeError += logger.send(accelData.x());
+  writeError += logger.send(accelData.y());
+  writeError += logger.send(accelData.z());
+  writeError += logger.Flush();
 
   // Reset softState 
   softState=0;
 
-  // Write data to SD Card and Serial
-  if ( !SDC.Write(dataString) ) {
-	softState=softState+8;
-	bell.error();
-  }
-  Serial.println(dataString);
+  // Check if there were any write errors
+  if (writeError != 0) {
 
+    softState=8;
+
+  }
   packetCount+=1;
   
   // Delay (for testing only)
