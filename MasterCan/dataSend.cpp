@@ -14,6 +14,11 @@ logger::logger(String fileName, char delimiter) {
   _delimiter=delimiter;
 }
 
+// Returns whether the SD card has initialised succesfully
+bool logger::SDstart(int SDPin) {
+  return SD.begin(SDPin);
+}
+
 // Terminate line and flush serial and SD to avoid errors
 int logger::Flush(){
 

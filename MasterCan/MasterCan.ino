@@ -6,7 +6,6 @@
 #include "Bell.h"
 #include "BNO055.h"
 #include "Batt_health.h"
-#include "SDCard.h"
 #include "BMP388.h"
 #include "dataSend.h"
 
@@ -22,7 +21,6 @@ const int redLEDPin=6;
 Vib vib(vibpin);
 Bell bell(buzzerpin, greenLEDPin, redLEDPin);
 BNO055 accel;
-SDCard SDC;
 batt batt(battHealthPin);
 BMP388 alt(calibAlt);
 logger logger("results.txt",':');
@@ -43,11 +41,10 @@ byte softState=0;
 The individual errors can be found by getting the softState and dividing it into its individual powers of two
 The powers of 2 and their corresponding errors are as follows:
 
-1	-	WARNING: Results file not detected, created
-2	-	ERROR: SD card initialisation failed
-4	-	ERROR: BNO055 initialisation failed
-8	-	ERROR: Failed to write to SD Card
-16	-	ERROR: Battery voltage low
+1	-	ERROR: SD card initialisation failed
+2	-	ERROR: BNO055 initialisation failed
+4	-	ERROR: Failed to write to SD Card
+8	-	WARNING: Battery voltage low
 */
 
 void setup()
@@ -59,21 +56,16 @@ void setup()
   bell.start();
 
   // Initialise SD card
-  if (!SDC.start(10)) {
-        softState=2;
+  if (!logger.SDstart(10)) {
+        softState=1;
         Serial.println(softState);
 	bell.fatalError();
-  }
-
-  // Check if the output file exists on the SD card, and create it if it doesn't
-  if (!SDC.fileCheck("results.txt")) {
-	softState=softState+1;
   }
 
   // Initialise accelerometer
   if (!accel.start())
   {
-	softState=softState+4;
+	softState=softState+2;
 	Serial.println(softState);
  	bell.fatalError();
   }
@@ -151,7 +143,7 @@ void loop()
 
   // Check if the battery voltage is safe
   if (battVolt < minBattVolt) {
-     softState=softState+16;
+     softState=softState+8;
   }
 
   // Get accelerometer data
@@ -177,7 +169,7 @@ void loop()
   // Check if there were any write errors
   if (writeError != 0) {
 
-    softState=8;
+    softState=4;
 
   }
   packetCount+=1;

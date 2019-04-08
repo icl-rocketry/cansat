@@ -18,6 +18,7 @@ class logger
 
   public:
   
+  bool SDstart(int SDPin);
   logger(String fileName, char delimiter);
   template <typename T> int send(T data);
   int Flush();
