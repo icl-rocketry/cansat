@@ -24,7 +24,8 @@ class BNO055
 
     BNO055();
     bool start();
-    imu::Vector<3> getData();
+    imu::Vector<3> getAccel();
+    imu::Vector<3> getOrient();
     uint8_t calibration();
 
     

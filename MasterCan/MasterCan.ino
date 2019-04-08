@@ -147,7 +147,8 @@ void loop()
   }
 
   // Get accelerometer data
-  imu::Vector<3> accelData = accel.getData();
+  imu::Vector<3> accelData = accel.getAccel();
+  imu::Vector<3> orientData=accel.getOrient();
 
   // Send data
   int writeError=  logger.send(packetCount);
@@ -161,6 +162,9 @@ void loop()
   writeError += logger.send(accelData.x());
   writeError += logger.send(accelData.y());
   writeError += logger.send(accelData.z());
+  writeError += logger.send(orientData.x());
+  writeError += logger.send(orientData.y());
+  writeError += logger.send(orientData.z());
   writeError += logger.Flush();
 
   // Reset softState 
