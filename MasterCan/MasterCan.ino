@@ -174,7 +174,7 @@ void loop()
   if (writeError != 0) {
 
     softState=4;
-
+    bell.error();
   }
   packetCount+=1;
   
