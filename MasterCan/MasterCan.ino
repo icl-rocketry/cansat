@@ -10,11 +10,11 @@
 #include "dataSend.h"
 
 // Set the pins used
-const int battHealthPin = 2;
+const int battHealthPin = 19;
 const int calibAlt=39;
-const int vibpin = 6;
+const int vibpin = 2;
 const int buzzerpin=8;
-const int minBattVolt=9;
+const int minBattVolt=3;
 const int greenLEDPin=5;
 const int redLEDPin=6;
 
@@ -27,11 +27,11 @@ logger logger("results.txt",':');
 
 // Vertical speed below which CanSat will assume it is stationary, and descending.
 const float velStopThresh=2;
-const float velDropThresh=3;
+const float velDropThresh=-2;
 
 // Respective times that CanSat has to stay in its state for to count as stationary and descending
-const float velStopTimeThresh=3;
-const float velDropTimeThresh=3;
+const float velStopTimeThresh=3000;
+const float velDropTimeThresh=3000;
 
 unsigned long nowtime = millis();
 unsigned long packetCount=1;
@@ -95,7 +95,7 @@ void loop()
   float pressure = alt.Pres();
 
   // Calculate vertical velocity using differences in altitude over difference in time, save to velocity
-  float velocity = (altitude - prevAltitude) / ((nowtime - prevTime )/1000);
+  float velocity = 1000*(altitude - prevAltitude) / (nowtime - prevTime );
 
   static bool fell=false;
   static unsigned long prevDropTime=nowtime;
@@ -179,5 +179,5 @@ void loop()
   packetCount+=1;
   
   // Delay (for testing only)
-  delay(1000);
+  delay(700);
 }
