@@ -19,7 +19,7 @@ The latter two can be installed through the library manager using the Arduino ID
 
 ## Instructions for Operation of the CanSat
 
-Upon connecting the power, the CanSat should turn on automatically and begin setup. The **green** LED will turn on to indicate this, and will remain on as long as it is powered.
+Upon connecting the power, the CanSat should turn on automatically and begin setup. The **green** LED will turn on to indicate this, and will remain on as long as it is powered. Once setup has completed, the buzzer will do a short beep to indicate it has begun recording data.
 
 ### Errors
 
@@ -39,7 +39,7 @@ For example, a softState of 12 would mean:
 
 * It is failing to write to SD card
 
-Following from this, the softState can never be greater than 63.
+Following from this, the softState can never be greater than 15.
 
 #### Critical and non-Critical Errors
 

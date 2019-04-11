@@ -75,6 +75,12 @@ void setup()
   
   // Start vibration motor
   vib.vibstart();
+
+  // Beep the buzzer to show succesful run of startup sequence
+  bell.buzzerStart();
+  delay(300);
+  bell.buzzerStop();
+
 }
 
 
