@@ -20,7 +20,8 @@ class logger
   
   bool SDstart(int SDPin);
   logger(String fileName, char delimiter);
-  template <typename T> int send(T data);
+  bool open();
+  template <typename T> void send(T data);
   int Flush();
 
 };
@@ -29,25 +30,13 @@ class logger
 #endif
 
 // Sends data to both serial and SD card
-template<typename T> int logger::send(T data){
+template<typename T> void logger::send(T data){
 
   Serial.print(data); 
   Serial.print(_delimiter);
   
-  // Open SD card file
-  myFile=SD.open(_fileName, FILE_WRITE);
+  // Write data to SD card
+  myFile.print(data);
+  myFile.print(_delimiter);
 
-  if (myFile) { // If the file has been opened succesfully
-
-    // Write data to SD card
-    myFile.print(data);
-    myFile.print(_delimiter);
-
-    return 0;
-
-  } else {
-
-    return 1;
-  }
-  
 }

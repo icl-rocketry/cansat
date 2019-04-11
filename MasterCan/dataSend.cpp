@@ -19,25 +19,18 @@ bool logger::SDstart(int SDPin) {
   return SD.begin(SDPin);
 }
 
+// Function to open the SD card
+bool logger::open() {
+  myFile=SD.open(_fileName, FILE_WRITE);
+
+  return myFile;
+}
+
 // Terminate line and flush serial and SD to avoid errors
 int logger::Flush(){
 
   Serial.println();
-
-  // Open SD card file
-  myFile=SD.open(_fileName, FILE_WRITE);
-
-  if (myFile) { // If the file has been opened succesfully
-
-    // Write data to SD card
-    myFile.println();
-
-    return 0;
-
-  } else {
-
-    return 1;
-  }
+  myFile.println();
 
   Serial.flush();
   myFile.close();
