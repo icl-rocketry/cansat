@@ -11,7 +11,7 @@
 
 // Set the pins used
 const int battHealthPin = 19;
-const int calibAlt=39;
+const int seaPressure=101350;
 const int vibpin = 2;
 const int buzzerpin=8;
 const int minBattVolt=3;
@@ -22,7 +22,7 @@ Vib vib(vibpin);
 Bell bell(buzzerpin, greenLEDPin, redLEDPin);
 BNO055 accel;
 batt batt(battHealthPin);
-BMP388 alt(calibAlt);
+BMP388 alt(seaPressure);
 logger logger("results.txt",':');
 
 // Vertical speed below which CanSat will assume it is stationary, and descending.

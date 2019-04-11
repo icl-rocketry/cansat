@@ -17,14 +17,13 @@ class BMP388
   private:
 
     DFRobot_BMP388_I2C bmp3xx;      //Create a bmp388 object to communicate with IIC.
-    float _calibAlt;        //Accurate altitude (m) to calibrate bmp388 -> NEED TO FILL IN
+    float _seaPressure;        //Accurate altitude (m) to calibrate bmp388 -> NEED TO FILL IN
 
   public:
 
     // Function used to initialise the sensor, returns true if initialisation was succesful
-    BMP388(float calibAlt);
+    BMP388(float seaPressure);
     bool start();
-    float dispSeaLevel(int mode);
     float Alt();
     float Pres();
     float Temp();
