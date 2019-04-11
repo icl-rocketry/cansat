@@ -19,7 +19,7 @@ The latter two can be installed through the library manager using the Arduino ID
 
 ## Instructions for Operation of the CanSat
 
-Upon connecting the power, the CanSat should turn on automatically and begin setup. The **green** LED will turn on to indicate this, and will remain on as long as it is powered.
+Upon connecting the power, the CanSat should turn on automatically and begin setup. The **green** LED will turn on to indicate this, and will remain on as long as it is powered. Once setup has completed, the buzzer will do a short beep to indicate it has begun recording data.
 
 ### Errors
 
@@ -27,22 +27,19 @@ In the event that the CanSat encounters an error throughout its operation, it wi
 It is a single byte where the error codes are each single bits. The individual errors can be found by getting the softState integer and converting it to binary. Alternatively, one can decompose it to its component powers of 2, as follows:
 
 ```
-1	-	WARNING: Results file not detected, created
-2	-	ERROR: SD card initialisation failed
-4	-	ERROR: BNO055 initialisation failed
-8	-	ERROR: Failed to write to SD Card
-16	-	ERROR: Battery voltage low
+1	-	ERROR: SD card initialisation failed
+2	-	ERROR: BNO055 initialisation failed
+4	-	ERROR: Failed to write to SD Card
+8	-	ERROR: Battery voltage low
 ```
 
-For example, a softState of 49 would mean:
+For example, a softState of 12 would mean:
 
 * Battery Voltage is low
 
 * It is failing to write to SD card
 
-* The results file wasnt originally present on the SD Card, so it has been recreated.
-
-Following from this, the softState can never be greater than 63.
+Following from this, the softState can never be greater than 15.
 
 #### Critical and non-Critical Errors
 
@@ -60,6 +57,6 @@ When the CanSat detects that it has landed, the buzzer will turn on and emit a c
 
 To save storage space and make the CanSat more reliable, the data packet is as minimalistic as possible. It has the following structure:
 
-`packetCount:flightTime:pressure:temperature:altitude:velocity:batteryVoltage:softState:Xacceleration:Yacceleration:Zacceleration`
+`packetCount:flightTime:pressure:temperature:altitude:velocity:batteryVoltage:softState:Xacceleration:Yacceleration:Zacceleration:Xorient:Yorient:Zorient:`
 
 All units are in SI.

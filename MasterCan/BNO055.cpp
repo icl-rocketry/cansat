@@ -36,10 +36,19 @@ bool BNO055::start() {
   bno.setExtCrystalUse(true);
 }
 
-// Get data from accelerometer, return as vector
-imu::Vector<3> BNO055::getData() {
+// Get acceleration data from accelerometer, return as vector
+imu::Vector<3> BNO055::getAccel() {
 
   imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+
+  // Return this new data
+  return euler;
+}
+
+// Get orientation data from accelerometer, return as vector
+imu::Vector<3> BNO055::getOrient() {
+
+  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
 
   // Return this new data
   return euler;

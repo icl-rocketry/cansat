@@ -35,7 +35,7 @@ void Bell::start() {
 
 //Code to Start buzzer
 void Bell::buzzerStart() {
-  tone(buzzerpin, 10000);
+  tone(buzzerpin, 1000);
 }
 
 // Code to end buzzer
