@@ -11,7 +11,7 @@
 
 // Set the pins used
 const int battHealthPin = 19;
-const int seaPressure=101350;
+const float seaPressure=101325;
 const int vibpin = 2;
 const int buzzerpin=8;
 const int minBattVolt=3;
