@@ -18,16 +18,26 @@ class logger
 
   public:
   
-  bool SDstart(int SDPin);
   logger(String fileName, char delimiter);
+  bool SDstart(int SDPin);
   bool open();
   template <typename T> void send(T data);
-  int Flush();
+  template <typename T2> void SDwrite(T2 data);
+  void Flush();
+  void SDflush();
 
 };
 
 
 #endif
+
+// Writes data to SD card
+template<typename T2> void logger::SDwrite(T2 data){
+
+  myFile.print(data);
+  myFile.print(_delimiter);
+
+}
 
 // Sends data to both serial and SD card
 template<typename T> void logger::send(T data){
@@ -36,7 +46,6 @@ template<typename T> void logger::send(T data){
   Serial.print(_delimiter);
   
   // Write data to SD card
-  myFile.print(data);
-  myFile.print(_delimiter);
+  logger::SDwrite(data);
 
 }

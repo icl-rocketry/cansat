@@ -26,12 +26,19 @@ bool logger::open() {
   return myFile;
 }
 
+// Terminate line and flush SD card
+void logger::SDflush() {
+
+    myFile.println();
+    myFile.flush();
+
+}
+
 // Terminate line and flush serial and SD to avoid errors
-int logger::Flush(){
+void logger::Flush() {
 
   Serial.println();
-  myFile.println();
-
   Serial.flush();
-  myFile.close();
+
+  logger::SDflush();
 }

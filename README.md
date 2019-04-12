@@ -62,3 +62,5 @@ To save storage space and make the CanSat more reliable, the data packet is as m
 `packetCount:flightTime:pressure:temperature:altitude:velocity:batteryVoltage:softState:Xacceleration:Yacceleration:Zacceleration:Xorient:Yorient:Zorient:`
 
 All units are in SI.
+
+On the SD card, due to the higher refresh rate, not all sensors are polled. All non-polled values will be 0.
