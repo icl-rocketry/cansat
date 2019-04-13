@@ -21,6 +21,8 @@ The latter two can be installed through the library manager using the Arduino ID
 
 Upon connecting the power, the CanSat should turn on automatically and begin setup. The **green** LED will turn on to indicate this, and will remain on as long as it is powered. Once setup has completed, the buzzer will do a short beep to indicate it has begun recording data.
 
+The pressure sensor needs to be calibrated by setting the variable `seaPressure` to the sea level pressure of that day.
+
 ### Errors
 
 In the event that the CanSat encounters an error throughout its operation, it will save the code of the error to a variable, named `softState`.  

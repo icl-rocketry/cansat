@@ -11,7 +11,7 @@
 
 // Set the pins used
 const int battHealthPin = 19;
-const int calibAlt=39;
+const float seaPressure=101325;
 const int vibpin = 2;
 const int buzzerpin=8;
 const int minBattVolt=3;
@@ -22,7 +22,7 @@ Vib vib(vibpin);
 Bell bell(buzzerpin, greenLEDPin, redLEDPin);
 BNO055 accel;
 batt batt(battHealthPin);
-BMP388 alt(calibAlt);
+BMP388 alt(seaPressure);
 logger logger("results.txt",':');
 
 // Vertical speed below which CanSat will assume it is stationary, and descending.
@@ -157,31 +157,34 @@ void loop()
   imu::Vector<3> orientData=accel.getOrient();
 
   // Send data
-  int writeError=  logger.send(packetCount);
-  writeError += logger.send(nowtime);
-  writeError += logger.send(pressure);
-  writeError += logger.send(temperature);
-  writeError += logger.send(altitude);
-  writeError += logger.send(velocity);
-  writeError += logger.send(battVolt);
-  writeError += logger.send(softState);
-  writeError += logger.send(accelData.x());
-  writeError += logger.send(accelData.y());
-  writeError += logger.send(accelData.z());
-  writeError += logger.send(orientData.x());
-  writeError += logger.send(orientData.y());
-  writeError += logger.send(orientData.z());
-  writeError += logger.Flush();
+  if (logger.open()) {
+
+  logger.send(packetCount);
+  logger.send(nowtime);
+  logger.send(pressure);
+  logger.send(temperature);
+  logger.send(altitude);
+  logger.send(velocity);
+  logger.send(battVolt);
+  logger.send(softState);
+  logger.send(accelData.x());
+  logger.send(accelData.y());
+  logger.send(accelData.z());
+  logger.send(orientData.x());
+  logger.send(orientData.y());
+  logger.send(orientData.z());
+  logger.Flush();
 
   // Reset softState 
   softState=0;
 
-  // Check if there were any write errors
-  if (writeError != 0) {
+  } else { // If writing fails give an error
 
-    softState=4;
-    bell.error();
+      softState=4;
+      bell.error();
+
   }
+
   packetCount+=1;
   
   // Delay (for testing only)
