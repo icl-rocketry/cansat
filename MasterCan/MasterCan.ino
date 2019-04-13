@@ -159,6 +159,7 @@ void loop()
   // Send data
   if (logger.open()) {
 
+  logger.send(packetCount);
   logger.send(nowtime);
   logger.send(pressure);
   logger.send(temperature);
